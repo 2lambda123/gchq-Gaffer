@@ -16,11 +16,6 @@
 
 package uk.gov.gchq.gaffer.tinkerpop.process.traversal.step;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.tinkerpop.gremlin.process.traversal.Traverser;
 import org.apache.tinkerpop.gremlin.process.traversal.step.map.VertexStep;
 import org.apache.tinkerpop.gremlin.structure.Edge;
@@ -33,10 +28,15 @@ import uk.gov.gchq.gaffer.data.elementdefinition.view.View;
 import uk.gov.gchq.gaffer.tinkerpop.GafferPopGraph;
 import uk.gov.gchq.gaffer.tinkerpop.GafferPopVertex;
 
-public class GafferPopVertexStep<E extends Element>  extends VertexStep<E> {
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
+public class GafferPopVertexStep<E extends Element>  extends VertexStep<E> {
+  private static final long serialVersionUID = 9061271587784526829L;
   private static final Logger LOGGER = LoggerFactory.getLogger(GafferPopVertexStep.class);
-  private final GafferPopGraph graph;
+  private final transient GafferPopGraph graph;
 
   public GafferPopVertexStep(final VertexStep<E> originalVertexStep) {
     super(originalVertexStep.getTraversal(), originalVertexStep.getReturnClass(), originalVertexStep.getDirection(), originalVertexStep.getEdgeLabels());
@@ -53,15 +53,25 @@ public class GafferPopVertexStep<E extends Element>  extends VertexStep<E> {
 
   private Iterator<? extends Vertex> vertices(final List<GafferPopVertex> vertices) {
     List<Object> vertexIds = vertices.stream().map(v -> v.id()).collect(Collectors.toList());
-    View view = new View.Builder().edges(Arrays.asList(getEdgeLabels())).build();
 
+    String[] edgeLables = this.getEdgeLabels();
+    if (edgeLables.length == 0) {
+      return graph.adjVertices(vertexIds, getDirection());
+    }
+
+    View view = new View.Builder().edges(Arrays.asList(edgeLables)).build();
     return graph.adjVerticesWithView(vertexIds, getDirection(), view);
   }
 
   private Iterator<? extends Edge> edges(final List<GafferPopVertex> vertices) {
     List<Object> vertexIds = vertices.stream().map(v -> v.id()).collect(Collectors.toList());
+
+    String[] edgeLables = this.getEdgeLabels();
+    if (edgeLables.length == 0) {
+      return graph.edges(vertexIds, getDirection());
+    }
+
     View view = new View.Builder().edges(Arrays.asList(getEdgeLabels())).build();
     return graph.edgesWithView(vertexIds, getDirection(), view);
   }
-
 }
