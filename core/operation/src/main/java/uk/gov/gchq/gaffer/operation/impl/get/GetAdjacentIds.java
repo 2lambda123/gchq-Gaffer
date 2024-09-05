@@ -46,11 +46,36 @@ public class GetAdjacentIds implements
         InputOutput<Iterable<? extends EntityId>, Iterable<? extends EntityId>>,
         MultiEntityIdInput,
         SeededGraphFilters {
-    private View view;
+    private View view = new View();
     private Iterable<? extends EntityId> input;
     private DirectedType directedType;
     private Map<String, String> options;
     private IncludeIncomingOutgoingType includeIncomingOutGoing;
+
+    public GetAdjacentIds input(final EntityId... input) {
+        this.setInput(input);
+        return this;
+    }
+
+    public GetAdjacentIds input(final Object... input) {
+        this.setInputFromVerticesAndIds(input);
+        return this;
+    }
+
+    public GetAdjacentIds view(final View view) {
+        this.view = view;
+        return this;
+    }
+
+    public GetAdjacentIds outbound() {
+        includeIncomingOutGoing = IncludeIncomingOutgoingType.OUTGOING;
+        return this;
+    }
+
+    public GetAdjacentIds inbound() {
+        includeIncomingOutGoing = IncludeIncomingOutgoingType.INCOMING;
+        return this;
+    }
 
     @Override
     public View getView() {

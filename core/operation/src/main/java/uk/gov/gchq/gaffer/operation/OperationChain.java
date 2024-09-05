@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
 @JsonPropertyOrder(value = {"class", "operations"}, alphabetic = true)
 @Since("1.0.0")
 @Summary("A chain of operations where the results are passed between each operation")
-public class OperationChain<OUT> implements Output<OUT>,
+public class OperationChain<OUT> extends OperationLibrary implements Output<OUT>,
         Operations<Operation> {
     private List<Operation> operations;
     private Map<String, String> options = new HashMap<>();
@@ -103,6 +103,25 @@ public class OperationChain<OUT> implements Output<OUT>,
         if (flatten) {
             this.operations = flatten();
         }
+    }
+
+
+    public OperationChain<Void> first(Operation op) {
+        return then(op);
+    }
+
+    public <T> OperationChain<T> first(Output op) {
+        return then(op);
+    }
+
+    public OperationChain<Void> then(Operation op) {
+        this.operations.add(op);
+        return (OperationChain<Void>) this;
+    }
+
+    public <T> OperationChain<T> then(Output op) {
+        this.operations.add(op);
+        return (OperationChain<T>) this;
     }
 
     public static OperationChain<?> wrap(final Operation operation) {

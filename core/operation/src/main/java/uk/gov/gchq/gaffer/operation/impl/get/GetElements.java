@@ -70,11 +70,34 @@ public class GetElements implements
         MultiElementIdInput,
         SeededGraphFilters {
 
-    private View view;
+    private View view = new View();
     private IncludeIncomingOutgoingType includeIncomingOutGoing;
     private DirectedType directedType;
     private Iterable<? extends ElementId> input;
     private Map<String, String> options;
+
+    public GetElements outgoing() {
+        setIncludeIncomingOutGoing(IncludeIncomingOutgoingType.OUTGOING);
+        return this;
+    }
+
+    public GetElements incoming() {
+        setIncludeIncomingOutGoing(IncludeIncomingOutgoingType.INCOMING);
+        return this;
+    }
+
+    public GetElements either() {
+        setIncludeIncomingOutGoing(IncludeIncomingOutgoingType.EITHER);
+        return this;
+    }
+
+    public GetElements view(final View view) {
+        this.view = new View.Builder()
+                .merge(this.view)
+                .merge(view)
+                .build();
+        return this;
+    }
 
     /**
      * Gets the incomingOutGoingType for this operation which is used for filtering Edges.
