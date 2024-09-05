@@ -16,7 +16,6 @@
 
 package uk.gov.gchq.gaffer.federatedstore.operation.handler.impl;
 
-
 import uk.gov.gchq.gaffer.operation.OperationException;
 import uk.gov.gchq.gaffer.operation.impl.get.GetAllElements;
 import uk.gov.gchq.gaffer.store.Context;
@@ -25,10 +24,12 @@ import uk.gov.gchq.gaffer.store.operation.handler.OperationHandler;
 
 public class TestErrorHandler implements OperationHandler<GetAllElements> {
 
-    public static final String TEST_ERROR_HANDLER_FLAG = "TestErrorHandlerFlag";
+  public static final String TEST_ERROR_HANDLER_FLAG = "TestErrorHandlerFlag";
 
-    @Override
-    public Object doOperation(final GetAllElements operation, final Context context, final Store store) throws OperationException {
-        throw new UnsupportedOperationException(TEST_ERROR_HANDLER_FLAG);
-    }
+  @Override
+  public Object doOperation(final GetAllElements operation,
+                            final Context context, final Store store)
+      throws OperationException {
+    throw new UnsupportedOperationException(TEST_ERROR_HANDLER_FLAG);
+  }
 }

@@ -18,64 +18,57 @@ package uk.gov.gchq.gaffer.federatedstore.operation;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.lang3.exception.CloneFailedException;
-
 import uk.gov.gchq.gaffer.graph.hook.GraphHook;
 import uk.gov.gchq.koryphe.Since;
 import uk.gov.gchq.koryphe.Summary;
 
-@JsonPropertyOrder(
-        value = {"class", "graphId"},
-        alphabetic = true
-)
+@JsonPropertyOrder(value = {"class", "graphId"}, alphabetic = true)
 @Since("1.4.0")
 @Summary("Adds a new Graph with hooks to the federated store")
 public class AddGraphWithHooks extends AddGraph {
-    private GraphHook[] hooks;
+  private GraphHook[] hooks;
 
-    @Override
-    public AddGraphWithHooks shallowClone() throws CloneFailedException {
-        Builder builder = new Builder()
-                .graphId(getGraphId())
-                .schema(getSchema())
-                .storeProperties(getStoreProperties())
-                .parentSchemaIds(getParentSchemaIds())
-                .parentPropertiesId(getParentPropertiesId())
-                .options(getOptions())
-                .isPublic(getIsPublic())
-                .readAccessPredicate(getReadAccessPredicate())
-                .writeAccessPredicate(getWriteAccessPredicate())
-                .setUserRequestingAdminUsage(isUserRequestingAdminUsage())
-                .hooks(hooks);
+  @Override
+  public AddGraphWithHooks shallowClone() throws CloneFailedException {
+    Builder builder =
+        new Builder()
+            .graphId(getGraphId())
+            .schema(getSchema())
+            .storeProperties(getStoreProperties())
+            .parentSchemaIds(getParentSchemaIds())
+            .parentPropertiesId(getParentPropertiesId())
+            .options(getOptions())
+            .isPublic(getIsPublic())
+            .readAccessPredicate(getReadAccessPredicate())
+            .writeAccessPredicate(getWriteAccessPredicate())
+            .setUserRequestingAdminUsage(isUserRequestingAdminUsage())
+            .hooks(hooks);
 
-        if (null != getGraphAuths()) {
-            builder.graphAuths(getGraphAuths().toArray(new String[getGraphAuths().size()]));
-        }
-
-        return builder.build();
+    if (null != getGraphAuths()) {
+      builder.graphAuths(
+          getGraphAuths().toArray(new String[getGraphAuths().size()]));
     }
 
-    public GraphHook[] getHooks() {
-        return hooks;
-    }
+    return builder.build();
+  }
 
-    public void setHooks(final GraphHook... hooks) {
-        this.hooks = hooks;
-    }
+  public GraphHook[] getHooks() { return hooks; }
 
-    public abstract static class AddGraphWithHooksBuilder<OP extends AddGraphWithHooks, B extends AddGraphWithHooksBuilder<OP, ?>> extends AddGraphBuilder<OP, B> {
-        protected AddGraphWithHooksBuilder(final OP addGraph) {
-            super(addGraph);
-        }
+  public void setHooks(final GraphHook... hooks) { this.hooks = hooks; }
 
-        public B hooks(final GraphHook... hooks) {
-            _getOp().setHooks(hooks);
-            return _self();
-        }
-    }
+  public abstract static class AddGraphWithHooksBuilder<
+      OP extends AddGraphWithHooks, B extends AddGraphWithHooksBuilder<OP, ?>>
+      extends AddGraphBuilder<OP, B> {
+    protected AddGraphWithHooksBuilder(final OP addGraph) { super(addGraph); }
 
-    public static class Builder extends AddGraphWithHooksBuilder<AddGraphWithHooks, Builder> {
-        public Builder() {
-            super(new AddGraphWithHooks());
-        }
+    public B hooks(final GraphHook... hooks) {
+      _getOp().setHooks(hooks);
+      return _self();
     }
+  }
+
+  public static class Builder
+      extends AddGraphWithHooksBuilder<AddGraphWithHooks, Builder> {
+    public Builder() { super(new AddGraphWithHooks()); }
+  }
 }
