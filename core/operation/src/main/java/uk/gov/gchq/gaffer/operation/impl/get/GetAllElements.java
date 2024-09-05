@@ -18,7 +18,7 @@ package uk.gov.gchq.gaffer.operation.impl.get;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.type.TypeReference;
-
+import java.util.Map;
 import uk.gov.gchq.gaffer.commonutil.iterable.CloseableIterable;
 import uk.gov.gchq.gaffer.data.element.Element;
 import uk.gov.gchq.gaffer.data.element.id.DirectedType;
@@ -30,95 +30,90 @@ import uk.gov.gchq.gaffer.operation.serialisation.TypeReferenceImpl;
 import uk.gov.gchq.koryphe.Since;
 import uk.gov.gchq.koryphe.Summary;
 
-import java.util.Map;
-
 /**
- * Extends {@link GetAllElements}, but fetches all elements from the graph that are
- * compatible with the provided view.
- * There are also various flags to filter out the elements returned.
+ * Extends {@link GetAllElements}, but fetches all elements from the graph that
+ * are compatible with the provided view. There are also various flags to filter
+ * out the elements returned.
  */
 @JsonPropertyOrder(value = {"class", "view"}, alphabetic = true)
 @Since("1.0.0")
 @Summary("Gets all elements compatible with a provided View")
-public class GetAllElements implements
-        Output<CloseableIterable<? extends Element>>,
-        GraphFilters {
-    private View view = new View();
-    private DirectedType directedType;
-    private Map<String, String> options;
+public class GetAllElements
+    implements Output<CloseableIterable<? extends Element>>, GraphFilters {
+  private View view = new View();
+  private DirectedType directedType;
+  private Map<String, String> options;
 
-    public GetAllElements view(final View view) {
-        this.view = new View.Builder()
-                .merge(this.view)
-                .merge(view)
-                .build();
-        return this;
-    }
+  public GetAllElements view(final View view) {
+    this.view = new View.Builder().merge(this.view).merge(view).build();
+    return this;
+  }
 
-    public GetAllElements directed() {
-        setDirectedType(DirectedType.DIRECTED);
-        return this;
-    }
+  public GetAllElements directed() {
+    setDirectedType(DirectedType.DIRECTED);
+    return this;
+  }
 
-    public GetAllElements undirected() {
-        setDirectedType(DirectedType.UNDIRECTED);
-        return this;
-    }
+  public GetAllElements undirected() {
+    setDirectedType(DirectedType.UNDIRECTED);
+    return this;
+  }
 
-    public GetAllElements either() {
-        setDirectedType(DirectedType.EITHER);
-        return this;
-    }
+  public GetAllElements either() {
+    setDirectedType(DirectedType.EITHER);
+    return this;
+  }
 
-    @Override
-    public View getView() {
-        return view;
-    }
+  @Override
+  public View getView() {
+    return view;
+  }
 
-    @Override
-    public void setView(final View view) {
-        this.view = view;
-    }
+  @Override
+  public void setView(final View view) {
+    this.view = view;
+  }
 
-    @Override
-    public DirectedType getDirectedType() {
-        return directedType;
-    }
+  @Override
+  public DirectedType getDirectedType() {
+    return directedType;
+  }
 
-    @Override
-    public void setDirectedType(final DirectedType directedType) {
-        this.directedType = directedType;
-    }
+  @Override
+  public void setDirectedType(final DirectedType directedType) {
+    this.directedType = directedType;
+  }
 
-    @Override
-    public TypeReference<CloseableIterable<? extends Element>> getOutputTypeReference() {
-        return new TypeReferenceImpl.CloseableIterableElement();
-    }
+  @Override
+  public TypeReference<CloseableIterable<? extends Element>>
+  getOutputTypeReference() {
+    return new TypeReferenceImpl.CloseableIterableElement();
+  }
 
-    @Override
-    public Map<String, String> getOptions() {
-        return options;
-    }
+  @Override
+  public Map<String, String> getOptions() {
+    return options;
+  }
 
-    @Override
-    public void setOptions(final Map<String, String> options) {
-        this.options = options;
-    }
+  @Override
+  public void setOptions(final Map<String, String> options) {
+    this.options = options;
+  }
 
-    @Override
-    public GetAllElements shallowClone() {
-        return new GetAllElements.Builder()
-                .view(view)
-                .directedType(directedType)
-                .options(options)
-                .build();
-    }
+  @Override
+  public GetAllElements shallowClone() {
+    return new GetAllElements.Builder()
+        .view(view)
+        .directedType(directedType)
+        .options(options)
+        .build();
+  }
 
-    public static class Builder extends Operation.BaseBuilder<GetAllElements, Builder>
-            implements Output.Builder<GetAllElements, CloseableIterable<? extends Element>, Builder>,
-            GraphFilters.Builder<GetAllElements, Builder> {
-        public Builder() {
-            super(new GetAllElements());
-        }
-    }
+  public static class Builder
+      extends Operation.BaseBuilder<GetAllElements, Builder>
+      implements Output.Builder<GetAllElements,
+                                CloseableIterable<? extends Element>, Builder>,
+                 GraphFilters.Builder<GetAllElements, Builder> {
+    public Builder() { super(new GetAllElements()); }
+  }
 }

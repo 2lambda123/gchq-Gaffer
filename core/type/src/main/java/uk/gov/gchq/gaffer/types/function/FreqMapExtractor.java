@@ -27,34 +27,27 @@ import uk.gov.gchq.koryphe.function.KorypheFunction;
 @Since("1.0.0")
 @Summary("Extracts a count from a FreqMap for a given key")
 public class FreqMapExtractor extends KorypheFunction<FreqMap, Long> {
-    private String key;
+  private String key;
 
-    public FreqMapExtractor() {
+  public FreqMapExtractor() {}
+
+  public FreqMapExtractor(final String key) { this.key = key; }
+
+  public FreqMapExtractor key(final String key) {
+    this.key = key;
+    return this;
+  }
+
+  @Override
+  public Long apply(final FreqMap freqMap) {
+    if (null != freqMap) {
+      return freqMap.get(key);
     }
 
-    public FreqMapExtractor(final String key) {
-        this.key = key;
-    }
+    return null;
+  }
 
-    public FreqMapExtractor key(final String key) {
-        this.key = key;
-        return this;
-    }
+  public String getKey() { return key; }
 
-    @Override
-    public Long apply(final FreqMap freqMap) {
-        if (null != freqMap) {
-            return freqMap.get(key);
-        }
-
-        return null;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(final String key) {
-        this.key = key;
-    }
+  public void setKey(final String key) { this.key = key; }
 }

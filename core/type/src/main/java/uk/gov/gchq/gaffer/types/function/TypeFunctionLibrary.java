@@ -17,7 +17,5 @@
 package uk.gov.gchq.gaffer.types.function;
 
 public interface TypeFunctionLibrary {
-    static FreqMapExtractor freqMapExtractor() {
-        return new FreqMapExtractor();
-    }
+  static FreqMapExtractor freqMapExtractor() { return new FreqMapExtractor(); }
 }

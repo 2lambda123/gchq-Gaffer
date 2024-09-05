@@ -18,7 +18,7 @@ package uk.gov.gchq.gaffer.operation.impl;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.type.TypeReference;
-
+import java.util.Map;
 import uk.gov.gchq.gaffer.data.element.Element;
 import uk.gov.gchq.gaffer.operation.Operation;
 import uk.gov.gchq.gaffer.operation.Validatable;
@@ -28,96 +28,95 @@ import uk.gov.gchq.gaffer.operation.serialisation.TypeReferenceImpl;
 import uk.gov.gchq.koryphe.Since;
 import uk.gov.gchq.koryphe.Summary;
 
-import java.util.Map;
-
 /**
- * A {@code Validate} operation takes in {@link uk.gov.gchq.gaffer.data.element.Element}s validates them using the
- * store schema and returns the valid {@link uk.gov.gchq.gaffer.data.element.Element}s.
- * If skipInvalidElements is set to false, the handler should stop the operation if invalid elements are found.
- * The Graph will automatically add this operation prior to all {@link uk.gov.gchq.gaffer.operation.Validatable} operations when
- * executing.
+ * A {@code Validate} operation takes in {@link
+ * uk.gov.gchq.gaffer.data.element.Element}s validates them using the store
+ * schema and returns the valid {@link
+ * uk.gov.gchq.gaffer.data.element.Element}s. If skipInvalidElements is set to
+ * false, the handler should stop the operation if invalid elements are found.
+ * The Graph will automatically add this operation prior to all {@link
+ * uk.gov.gchq.gaffer.operation.Validatable} operations when executing.
  *
  * @see uk.gov.gchq.gaffer.operation.impl.Validate.Builder
  */
 @JsonPropertyOrder(value = {"class", "input"}, alphabetic = true)
 @Since("1.0.0")
 @Summary("Validates elements based on the schema")
-public class Validate implements
-        Validatable,
-        InputOutput<Iterable<? extends Element>, Iterable<? extends Element>>,
-        MultiInput<Element> {
-    private boolean validate = true;
-    private boolean skipInvalidElements;
-    private Iterable<? extends Element> input;
-    private Map<String, String> options;
+public class Validate implements Validatable,
+                                 InputOutput<Iterable<? extends Element>,
+                                             Iterable<? extends Element>>,
+                                 MultiInput<Element> {
+  private boolean validate = true;
+  private boolean skipInvalidElements;
+  private Iterable<? extends Element> input;
+  private Map<String, String> options;
 
-    public Validate skipInvalid() {
-        setSkipInvalidElements(true);
-        return this;
-    }
+  public Validate skipInvalid() {
+    setSkipInvalidElements(true);
+    return this;
+  }
 
-    @Override
-    public boolean isSkipInvalidElements() {
-        return skipInvalidElements;
-    }
+  @Override
+  public boolean isSkipInvalidElements() {
+    return skipInvalidElements;
+  }
 
-    @Override
-    public boolean isValidate() {
-        return validate;
-    }
+  @Override
+  public boolean isValidate() {
+    return validate;
+  }
 
-    @Override
-    public void setSkipInvalidElements(final boolean skipInvalidElements) {
-        this.skipInvalidElements = skipInvalidElements;
-    }
+  @Override
+  public void setSkipInvalidElements(final boolean skipInvalidElements) {
+    this.skipInvalidElements = skipInvalidElements;
+  }
 
-    @Override
-    public void setValidate(final boolean validate) {
-        this.validate = validate;
-    }
+  @Override
+  public void setValidate(final boolean validate) {
+    this.validate = validate;
+  }
 
-    @Override
-    public TypeReference<Iterable<? extends Element>> getOutputTypeReference() {
-        return new TypeReferenceImpl.IterableElement();
-    }
+  @Override
+  public TypeReference<Iterable<? extends Element>> getOutputTypeReference() {
+    return new TypeReferenceImpl.IterableElement();
+  }
 
-    @Override
-    public Iterable<? extends Element> getInput() {
-        return input;
-    }
+  @Override
+  public Iterable<? extends Element> getInput() {
+    return input;
+  }
 
-    @Override
-    public void setInput(final Iterable<? extends Element> input) {
-        this.input = input;
-    }
+  @Override
+  public void setInput(final Iterable<? extends Element> input) {
+    this.input = input;
+  }
 
-    @Override
-    public Validate shallowClone() {
-        return new Validate.Builder()
-                .validate(validate)
-                .skipInvalidElements(skipInvalidElements)
-                .input(input)
-                .options(options)
-                .build();
-    }
+  @Override
+  public Validate shallowClone() {
+    return new Validate.Builder()
+        .validate(validate)
+        .skipInvalidElements(skipInvalidElements)
+        .input(input)
+        .options(options)
+        .build();
+  }
 
-    @Override
-    public Map<String, String> getOptions() {
-        return options;
-    }
+  @Override
+  public Map<String, String> getOptions() {
+    return options;
+  }
 
-    @Override
-    public void setOptions(final Map<String, String> options) {
-        this.options = options;
-    }
+  @Override
+  public void setOptions(final Map<String, String> options) {
+    this.options = options;
+  }
 
-    public static final class Builder
-            extends Operation.BaseBuilder<Validate, Builder>
-            implements Validatable.Builder<Validate, Builder>,
-            InputOutput.Builder<Validate, Iterable<? extends Element>, Iterable<? extends Element>, Builder>,
-            MultiInput.Builder<Validate, Element, Builder> {
-        public Builder() {
-            super(new Validate());
-        }
-    }
+  public static final class Builder
+      extends Operation.BaseBuilder<Validate, Builder>
+      implements Validatable.Builder<Validate, Builder>,
+                 InputOutput.Builder<Validate, Iterable<? extends Element>,
+                                     Iterable<? extends Element>, Builder>,
+                 MultiInput.Builder<Validate, Element, Builder> {
+    public Builder() { super(new Validate()); }
+  }
 }
